@@ -1,0 +1,18 @@
+Pattern da mostrare
+- Builder
+- Adapter
+- Decorator
+- Composite
+- Strategy
+
+Pattern "inutili"
+- Prototype
+- Singleton
+- State (?)
+
+Scaletta da seguire:
+- Definizione di design pattern e astrazione nel mondo delle funzioni
+- Introduzione ad Haskell come linguaggio funzionale
+- Pattern Matching
+- Trattazione di 4 design pattern
+- Paradigma funzionale in Java
