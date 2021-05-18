@@ -1,10 +1,13 @@
 module Strategy where
-import Factory
+
+data Employee = Employee {fName:: String, lName:: String}
+              | TeamManager {fName::String, lName::String, tName::String, eList::[Employee] }
 
 -- Il pattern strategy è la funzione identità: f(x) = x => repr = id
-repr :: (Employee -> String) -> Employee -> String
-repr f = f
--- repr = id
+repr :: Employee -> String
+repr e = case e of
+    (Employee f l) -> plain e
+    _  -> toJSON e
 
 toJSON :: Employee -> String
 toJSON (Employee f l) = "{firstName: " ++ f ++ ", lastName: " ++ l ++  "}"
