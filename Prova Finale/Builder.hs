@@ -1,39 +1,18 @@
-newtype Pizza = Pizza [Condimento] deriving (Show)
-data Condimento = Prosciutto | Speck deriving (Show)
+data Spec = Programmer | Engineer | TeamManager
+data Employee = Employee {fName::String, lName::String} | SpecialEmployee {fName::String, lName::String, spec::Spec}
+newtype Team = Team [Employee]
 
-class HasPrice a where
-    price :: a -> Double
+createTeam :: [Team -> Team] -> Team
+createTeam = foldr id (Team [])
 
-instance HasPrice Condimento where
-    price Prosciutto = 2.5
-    price Speck = 4.8
+withProgrammer :: Team -> Employee -> Team
+withProgrammer (Team tm) (Employee fName lName) = Team (SpecialEmployee fName lName Programmer:tm)
+withProgrammer (Team tm) p@(SpecialEmployee fName lName Programmer) = Team (p:tm)
 
-instance HasPrice Pizza where
-    price (Pizza condimenti) = foldl (+) 5.3 $ map price condimenti
+withTeamManager :: Team -> Employee -> Team
+withTeamManager (Team tm) (Employee fName lName) = Team (SpecialEmployee fName lName TeamManager:tm)
+withTeamManager (Team tm) t@(SpecialEmployee fName lName TeamManager) = Team (t:tm)
 
-condisci :: String -> Pizza -> Pizza
-condisci "Prosciutto" (Pizza condimenti) = Pizza (Prosciutto:condimenti)
-condisci "Speck" (Pizza condimenti) = Pizza (Speck:condimenti)
-
--- Questo è il builder
-inforna :: Foldable t => t (Pizza -> Pizza) -> Pizza
-inforna = foldr id (Pizza [])
-
-{- Prima era
-condisci :: Pizza -> String -> Pizza
-...
-
-inforna :: [String] -> Pizza
-inforna = foldl condisci (Pizza [])
- -}
-
-data Car = Car {seats::Maybe Int, engine::Maybe String} deriving (Show)
-
-withSeats :: Int -> Car -> Car
-withSeats n c = c{seats = Just n}
-
-withEngine :: String -> Car -> Car
-withEngine e c = c{engine = Just e}
-
-buildCar :: [Car -> Car] -> Car
-buildCar = foldr id (Car Nothing Nothing)
+withEngineer :: Team -> Employee -> Team
+withEngineer (Team tm) (Employee fName lName) = Team (SpecialEmployee fName lName Engineer:tm)
+withEngineer (Team tm) e@(SpecialEmployee fName lName Engineer) = Team (e:tm)
